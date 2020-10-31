@@ -1,8 +1,0 @@
-
-public abstract class Generic_Problem {
-
-	public Generic_Problem() {
-		// TODO Auto-generated constructor stub
-	}
-
-}
