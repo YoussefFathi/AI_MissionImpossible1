@@ -1,0 +1,13 @@
+
+public  class Generic_Search {
+	
+	public statis void general_search(String problem,) {
+		
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

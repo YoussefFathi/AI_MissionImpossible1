@@ -1,0 +1,11 @@
+
+public abstract class Generic_Problem {
+	
+	private String initialState;
+	private Operators operators;
+
+	public Generic_Problem() {
+		// TODO Auto-generated constructor stub
+	}
+
+}
