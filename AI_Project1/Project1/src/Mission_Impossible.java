@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Mission_Impossible extends  Generic_Problem{
 	
 	public Mission_Impossible() {
@@ -13,6 +15,12 @@ public class Mission_Impossible extends  Generic_Problem{
 	public boolean goalTest(String currentState) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public ArrayList<ST_Node> getNewNodes(ArrayList<String> newStates, ST_Node parent) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
