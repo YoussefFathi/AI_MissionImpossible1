@@ -13,7 +13,7 @@ public class Generic_Search {
 				if (problem.goalTest(currentNode.getState())) {
 					return new String("Solution is Here");
 				}
-				ArrayList<String> newStates = problem.operators.apply(currentNode.getState());
+				ArrayList<String> newStates = problem.operators.apply(currentNode);
 				ArrayList<ST_Node> newNodes = problem.getNewNodes(newStates, currentNode);
 				queue = func.addNodes(queue, newNodes);
 				depth++;

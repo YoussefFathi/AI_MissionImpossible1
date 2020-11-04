@@ -5,7 +5,7 @@ public class MI_Operators extends Operators {
 	public MI_Operators() {
 		// TODO Auto-generated constructor stub
 	}
-	public ArrayList<String> apply(String state) {
+	public ArrayList<String> apply(ST_Node stateNode) {
 		return null;
 	}
 
