@@ -30,6 +30,7 @@ public class Mission_Impossible extends Generic_Problem {
 		generated.add(cell_e);
 		generated.add(cell_s);
 		int num_imf = (int) (Math.random() * (11 - 5 + 1) + 5);
+		int c = (int) (Math.random() * (num_imf - 1 + 1) + 1);
 
 		while (generated.size() < num_imf + 2) {
 			Integer next = (int) (Math.random() * (total_cells + 1 - 0 + 1) + 0);
@@ -37,7 +38,7 @@ public class Mission_Impossible extends Generic_Problem {
 			generated.add(next);
 		}
 
-		String grid = width + "," + height + ";";
+		String grid = width + "," + height + "," + c + ";";
 		Integer[] generated_array = new Integer[generated.size()];
 		generated.toArray(generated_array);
 		int[] health = new int[num_imf];
@@ -65,13 +66,14 @@ public class Mission_Impossible extends Generic_Problem {
 			}
 			grid = grid + health[i];
 		}
-		int c = (int) (Math.random() * (num_imf - 1 + 1) + 1);
 		grid = grid + ";" + c + ";";
 		//
-		System.out.println("WIDTH" + width);
-		System.out.println("Height" + height);
-		System.out.println(num_imf);
+		System.out.println("Width: " + width);
+		System.out.println("Height: " + height);
+		System.out.println("IMF Members: "+num_imf);
+		System.out.println("Generated Health:");
 		System.out.println(generated);
+		System.out.println("Grid:");
 		System.out.println(grid);
 
 		return grid;
@@ -80,17 +82,17 @@ public class Mission_Impossible extends Generic_Problem {
 	public static void solve(String grid, String strategy, boolean visualize) {
 		/*
 		 * State Fromat:
-		 * <ex,ey;sx,sy;i1x,i1y,i1h,i1S|i2x,i2y,i2h,i2S|..inx,iny,inh,inS;carried so
+		 * <ex,ey;sx,sy;i1x,i1y,i1h,i1S-i2x,i2y,i2h,i2S-..inx,iny,inh,inS;carried so
 		 * far>
 		 */
 		String[] splitted = grid.split(";");
-		String initialState = splitted[1] + ";" + splitted[2] + ";";
+		String initialState = splitted[0]+";"+splitted[1] + ";" + splitted[2] + ";";
 		String[] imfMembers = splitted[3].split(",");
 		String[] imfHealth = splitted[4].split(",");
 		for (int i = 0; i < imfMembers.length; i = i + 2) {
 			String imfString = "";
 			if (i != 0) {
-				imfString = imfString + "|";
+				imfString = imfString + "-";
 			}
 			imfString = imfString + imfMembers[i] + "," + imfMembers[i + 1] + "," + imfHealth[i / 2] + "," + "F";
 			initialState = initialState.concat(imfString);
@@ -110,22 +112,24 @@ public class Mission_Impossible extends Generic_Problem {
 				}
 				depth++;
 			}
-		}
-		else {
+		} else {
 			solution = Generic_Search.general_search(problem, qing_func, -1);
 		}
-
+		System.out.println("Initial State:");
 		System.out.println(initialState);
+		System.out.println("Step 1:");
+		problem.operators.apply( new ST_Node(initialState, null, null, 0, new int[]{0,0}));
+		
 	}
 
 	@Override
 	public boolean goalTest(String currentState) {
 		// TODO Auto-generated method stub
-		String[] imfAll = currentState.split(";")[2].split("|");
+		String[] imfAll = currentState.split(";")[2].split("-");
 		int numImf = imfAll.length;
-		for( int i =0;i<numImf;i++) {
-			String[] splitted = imfAll[i].split(","); 
-			if(Integer.parseInt(splitted[2])<100 && splitted[3]=="F") {
+		for (int i = 0; i < numImf; i++) {
+			String[] splitted = imfAll[i].split(",");
+			if (Integer.parseInt(splitted[2]) < 100 && splitted[3] == "F") {
 				return false;
 			}
 		}
@@ -135,28 +139,28 @@ public class Mission_Impossible extends Generic_Problem {
 	@Override
 	public ArrayList<ST_Node> getNewNodes(ArrayList<String> newStates, ST_Node parent) {
 		// TODO Auto-generated method stub
-		String[] states  = new String[newStates.size()];
+		String[] states = new String[newStates.size()];
 		states = newStates.toArray(states);
 		ArrayList<ST_Node> newNodes = new ArrayList<ST_Node>();
-		
-		for (int i =0;i<states.length;i++) {
+
+		for (int i = 0; i < states.length; i++) {
 			String currentState = states[i];
-			String[] imfAll = currentState.split(";")[2].split("|");
-			int[] cost = new int[] {0,0};
+			String[] imfAll = currentState.split(";")[2].split("-");
+			int[] cost = new int[] { 0, 0 };
 			int totalDeaths = 0;
 			int totalSurvived = 0;
-			for ( int j=0;j<imfAll.length;j++) {
-				if(imfAll[j].split(",")[2]=="100") {
+			for (int j = 0; j < imfAll.length; j++) {
+				if (imfAll[j].split(",")[2] == "100") {
 					totalDeaths++;
 				}
-				if(imfAll[j].split(",")[3]=="T") {
+				if (imfAll[j].split(",")[3] == "T") {
 					totalSurvived = totalSurvived + Integer.parseInt(imfAll[j].split(",")[2]);
 				}
 			}
 			cost[0] = totalDeaths;
 			cost[1] = totalSurvived;
 			String op = currentState.split(";")[4];
-			ST_Node newNode = new ST_Node(currentState,parent,op,parent.getDepth()+1,cost);
+			ST_Node newNode = new ST_Node(currentState, parent, op, parent.getDepth() + 1, cost);
 			newNodes.add(newNode);
 		}
 		return newNodes;
