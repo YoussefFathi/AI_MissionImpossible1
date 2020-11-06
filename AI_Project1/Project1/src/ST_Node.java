@@ -1,5 +1,5 @@
 
-public class ST_Node {
+public class ST_Node implements Comparable<ST_Node> {
 	private String state;
 	private ST_Node parentNode;
 	private String operator;
@@ -47,6 +47,20 @@ public class ST_Node {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
+	}
+	@Override
+	public int compareTo(ST_Node node1) {
+		ST_Node node0 = this;
+		// TODO Auto-generated method stub
+		int deaths0 = node0.getCost()[0];
+		int deaths1 = node1.getCost()[0];
+		int health0 = node0.getCost()[1];
+		int health1 = node1.getCost()[1];
+		if (deaths0 == deaths1) {
+			return health0 - health1;
+		} else {
+			return deaths0 - deaths1;
+		}
 	}
 
 }

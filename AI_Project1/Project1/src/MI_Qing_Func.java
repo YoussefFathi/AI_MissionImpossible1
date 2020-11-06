@@ -1,5 +1,10 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class MI_Qing_Func {
 
@@ -48,9 +53,18 @@ class UCS implements Qing_Func {
 	@Override
 	public ArrayList<ST_Node> addNodes(ArrayList<ST_Node> queue, ArrayList<ST_Node> newNodes) {
 		// TODO Auto-generated method stub
+
 		queue.addAll(newNodes);
-		UCS_Comparator comp = new UCS_Comparator();
-		queue.sort(comp);
+		int index = queue.indexOf(Collections.min(queue));
+		queue.add(0,queue.remove(index));
+//		UCS_Comparator comp = new UCS_Comparator();
+//
+//		queue.sort(comp);
+		System.out.println("After Sorting");
+//		for(ST_Node s : queue) { 
+//			  System.out.print(Arrays.toString(s.getCost())); 
+//			}
+		System.out.println(Arrays.toString(queue.get(0).getCost()));
 		return queue;
 	}
 

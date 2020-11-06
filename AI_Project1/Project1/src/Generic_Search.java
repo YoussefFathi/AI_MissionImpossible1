@@ -8,18 +8,24 @@ public class Generic_Search {
 		queue.add(initialNode);
 		int depth = 0;
 		while (!queue.isEmpty()) {
-			if (depth < maxDepth && maxDepth!=-1) {
+				if (depth > maxDepth && maxDepth!=-1) {
+					break;
+				}
 				ST_Node currentNode = queue.remove(0);
+				System.out.println("Current State");
+				System.out.println(currentNode.getState());
 				if (problem.goalTest(currentNode.getState())) {
 					return new String("Solution is Here");
 				}
 				ArrayList<String> newStates = problem.operators.apply(currentNode);
+				System.out.println("New States" + " Depth: "+ depth);
+				System.out.println(newStates);
+				
 				ArrayList<ST_Node> newNodes = problem.getNewNodes(newStates, currentNode);
 				queue = func.addNodes(queue, newNodes);
-				depth++;
-			}else {
-				break;
-			}
+				System.out.println("Total Nodes in Queue");
+				System.out.println(queue.size());
+				depth=currentNode.getDepth()+1;
 		}
 		return new String("Fail");
 	}
