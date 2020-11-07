@@ -2,6 +2,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
@@ -25,8 +26,8 @@ public class Mission_Impossible extends Generic_Problem {
 		int maxDim = 15;
 		int width = (int) (Math.random() * (maxDim - minDim + 1) + minDim);
 		int height = (int) (Math.random() * (maxDim - minDim + 1) + minDim);
-		width = 5;
-		height=5;
+//		width = 5;
+//		height = 5;
 		int total_cells = (width * height);
 
 		int cell_e = (int) (Math.random() * (total_cells + 1 - 0 + 1) + 0);
@@ -40,7 +41,7 @@ public class Mission_Impossible extends Generic_Problem {
 		generated.add(cell_s);
 		int num_imf = (int) (Math.random() * (11 - 5 + 1) + 5);
 		int c = (int) (Math.random() * (num_imf - 1 + 1) + 1);
-		c=1;
+		// c = 3;
 		while (generated.size() < num_imf + 2) {
 			Integer next = (int) (Math.random() * (total_cells + 1 - 0 + 1) + 0);
 			// As we're adding to a set, this will automatically do a containment check
@@ -79,7 +80,7 @@ public class Mission_Impossible extends Generic_Problem {
 		//
 		System.out.println("Width: " + width);
 		System.out.println("Height: " + height);
-		System.out.println("IMF Members: "+num_imf);
+		System.out.println("IMF Members: " + num_imf);
 		System.out.println("Generated Health:");
 		System.out.println(generated);
 		System.out.println("Grid:");
@@ -95,7 +96,7 @@ public class Mission_Impossible extends Generic_Problem {
 		 * far>
 		 */
 		String[] splitted = grid.split(";");
-		String initialState = splitted[0]+";"+splitted[1] + ";" + splitted[2] + ";";
+		String initialState = splitted[0] + ";" + splitted[1] + ";" + splitted[2] + ";";
 		String[] imfMembers = splitted[3].split(",");
 		String[] imfHealth = splitted[4].split(",");
 		for (int i = 0; i < imfMembers.length; i = i + 2) {
@@ -111,8 +112,8 @@ public class Mission_Impossible extends Generic_Problem {
 		Mission_Impossible problem = new Mission_Impossible(initialState, ops, "", "");
 		Qing_Func qing_func = MI_Qing_Func.get_Qing_Func(strategy);
 		String solution = "";
-		//System.out.println("Initial State:");
-		//System.out.println(initialState);
+		// System.out.println("Initial State:");
+		// System.out.println(initialState);
 		if (strategy.equals("ID")) {
 			boolean solved = false;
 			int depth = 1;
@@ -126,37 +127,45 @@ public class Mission_Impossible extends Generic_Problem {
 		} else {
 			solution = Generic_Search.general_search(problem, qing_func, -1);
 		}
-		
-		//System.out.println("Initial State:");
-		//System.out.println(initialState);
-		//System.out.println("Step 1:");
-		//problem.operators.apply( new ST_Node(initialState, null, null, 0, new int[]{0,0}));
+
+		// System.out.println("Initial State:");
+		// System.out.println(initialState);
+		// System.out.println("Step 1:");
+		// problem.operators.apply( new ST_Node(initialState, null, null, 0, new
+		// int[]{0,0}));
 		System.out.println(solution);
-		
+
 	}
 
 	@Override
 	public boolean goalTest(String currentState) {
 		// TODO Auto-generated method stub
 		String[] imfAll = currentState.split(";")[3].split("-");
-		//System.out.println(Arrays.toString(imfAll));
+		String max_cap = currentState.split(";")[0].split(",")[2];
+		String curr_cap = currentState.split(";")[4];
+
+		// System.out.println(Arrays.toString(imfAll));
 		int numImf = imfAll.length;
 		for (int i = 0; i < numImf; i++) {
 			String[] splitted = imfAll[i].split(",");
-			//System.out.println(Arrays.toString(splitted));
-			//System.out.println(Integer.parseInt(splitted[2]));
-			if (Integer.parseInt(splitted[2]) < 100 && splitted[3].equals("F")) {
-				//System.out.println("ALO");
+			// System.out.println(Arrays.toString(splitted));
+			// System.out.println(Integer.parseInt(splitted[2]));
+			if (splitted[3].equals("F")) {
+				// System.out.println("ALO");
 				return false;
 			}
 		}
 //		System.out.println("Final");
 //		System.out.println(currentState);
-		return true;
+		if (max_cap.equals(curr_cap)) {
+			return true;
+		}
+		return false;
+
 	}
 
 	@Override
-	public ArrayList<ST_Node> getNewNodes(ArrayList<String> newStates, ST_Node parent) {
+	public ArrayList<ST_Node> getNewNodes(ArrayList<String> newStates, ST_Node parent, HashSet<String> dict) {
 		// TODO Auto-generated method stub
 		String[] states = new String[newStates.size()];
 		states = newStates.toArray(states);
@@ -172,16 +181,19 @@ public class Mission_Impossible extends Generic_Problem {
 				if (imfAll[j].split(",")[2].equals("100")) {
 					totalDeaths++;
 				}
-				if (!imfAll[j].split(",")[3].equals("F")) {
-					totalSurvived = totalSurvived + Integer.parseInt(imfAll[j].split(",")[2]);
-				}
+				//if (!imfAll[j].split(",")[3].equals("F")) {
+				totalSurvived = totalSurvived + Integer.parseInt(imfAll[j].split(",")[2]);
+				//}
 			}
 			cost[0] = totalDeaths;
 			cost[1] = totalSurvived;
 			String op = currentState.split(">>")[1];
 			currentState = currentState.split(">>")[0];
-			ST_Node newNode = new ST_Node(currentState, parent, op, parent.getDepth() + 1, cost);
-			newNodes.add(newNode);
+			if (!dict.contains(currentState)) {
+				ST_Node newNode = new ST_Node(currentState, parent, op, parent.getDepth() + 1, cost);
+				newNodes.add(newNode);
+			}
+
 		}
 		return newNodes;
 	}
@@ -191,11 +203,10 @@ public class Mission_Impossible extends Generic_Problem {
 		// TODO Auto-generated method stub
 		String grid = Mission_Impossible.gen_grid();
 		long start = System.currentTimeMillis();
-		Mission_Impossible.solve(grid, "UC", false);
+		Mission_Impossible.solve(grid, "BF", false);
 		System.out.println("Total Time");
-		System.out.println(System.currentTimeMillis()-start);
-	
-		
+		System.out.println(System.currentTimeMillis() - start);
+
 	}
 
 }

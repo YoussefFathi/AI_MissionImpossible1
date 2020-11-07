@@ -55,16 +55,18 @@ class UCS implements Qing_Func {
 		// TODO Auto-generated method stub
 
 		queue.addAll(newNodes);
-		int index = queue.indexOf(Collections.min(queue));
-		queue.add(0,queue.remove(index));
-//		UCS_Comparator comp = new UCS_Comparator();
+//		int index = queue.indexOf(Collections.min(queue));
 //
-//		queue.sort(comp);
-		System.out.println("After Sorting");
+//		ST_Node n = queue.remove(index);
+//		queue.add(0,n);
+		UCS_Comparator comp = new UCS_Comparator();
+
+		queue.sort(comp);
+//		System.out.println("After Sorting");
 //		for(ST_Node s : queue) { 
 //			  System.out.print(Arrays.toString(s.getCost())); 
 //			}
-		System.out.println(Arrays.toString(queue.get(0).getCost()));
+		System.out.println("Compare"+Arrays.toString(queue.get(0).getCost()));
 		return queue;
 	}
 
