@@ -26,8 +26,8 @@ public class Mission_Impossible extends Generic_Problem {
 		int maxDim = 15;
 		int width = (int) (Math.random() * (maxDim - minDim + 1) + minDim);
 		int height = (int) (Math.random() * (maxDim - minDim + 1) + minDim);
-//		width = 5;
-//		height = 5;
+		width = 5;
+		height = 5;
 		int total_cells = (width * height);
 
 		int cell_e = (int) (Math.random() * (total_cells + 1 - 0 + 1) + 0);

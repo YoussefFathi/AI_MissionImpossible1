@@ -7,7 +7,7 @@ public class Generic_Search {
 	public static String general_search(Generic_Problem problem, Qing_Func func, int maxDepth) {
 		ArrayList<ST_Node> queue = new ArrayList<ST_Node>();
 		HashSet<String> dict  = new HashSet<String>();
-		ST_Node initialNode = new ST_Node(problem.initialState, null, null, 0, getComputedCost(problem.initialState));
+		ST_Node initialNode = new ST_Node(problem.initialState, null, "", 0, getComputedCost(problem.initialState));
 		queue.add(initialNode);
 		int depth = 0;
 		while (!queue.isEmpty()) {

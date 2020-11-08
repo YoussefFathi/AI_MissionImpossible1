@@ -1,10 +1,15 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MI_Operators extends Operators {
-	String[] operators;
+	HashMap<String, String> inverted = new HashMap<String, String>();
 
 	public MI_Operators() {
 		operators = new String[] { "left", "right", "up", "down", "carry", "drop" };
+		inverted.put("left", "right");
+		inverted.put("right", "left");
+		inverted.put("up", "down");
+		inverted.put("down", "up");
 	}
 
 	public ArrayList<String> apply(ST_Node stateNode) {
@@ -23,8 +28,17 @@ public class MI_Operators extends Operators {
 			int curr_cap = Integer.parseInt(state[4]);
 			String penalized_members;
 			boolean valid_op = true;
-			String members =  state[3];
-;
+			String members = state[3];
+			if (!(stateNode.getParentNode() == (null))) {
+				String parentOp = stateNode.getParentNode().getOperator();
+				if(!(parentOp.equals("")||parentOp.equals("carry")||parentOp.equals("drop"))) {
+					if (inverted.get(parentOp).equals(this.operators[i])) {
+						System.out.println("REPEATED"+parentOp+inverted.get(parentOp));
+						valid_op = false;
+					}
+				}
+			
+			}
 			switch (this.operators[i]) {
 			case "left":
 				if (x > 0) {
@@ -81,6 +95,7 @@ public class MI_Operators extends Operators {
 			}
 			// String[] new_coor = new String[] { x + "", y + "" };
 			// curr_cap = Integer.parseInt(members_a[1]);
+
 			penalized_members = penalize(members, this.operators[i], curr_cap);
 			if (valid_op) {
 				// System.out.println("After " + this.operators[i]);
