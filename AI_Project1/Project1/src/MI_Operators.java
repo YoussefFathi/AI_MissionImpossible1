@@ -40,7 +40,7 @@ public class MI_Operators extends Operators {
 			
 			}
 			switch (this.operators[i]) {
-			case "left":
+			case "up":
 				if (x > 0) {
 					x--;
 				} else {
@@ -48,7 +48,7 @@ public class MI_Operators extends Operators {
 				}
 				;
 				break;
-			case "right":
+			case "down":
 				if (x < Integer.parseInt(bounds[0])) {
 					x++;
 				} else {
@@ -56,7 +56,7 @@ public class MI_Operators extends Operators {
 				}
 				;
 				break;
-			case "up":
+			case "left":
 				if (y > 0) {
 					y--;
 
@@ -65,7 +65,7 @@ public class MI_Operators extends Operators {
 				}
 				;
 				break;
-			case "down":
+			case "right":
 				if (y < Integer.parseInt(bounds[1])) {
 					y++;
 				} else {

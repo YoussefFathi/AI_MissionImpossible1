@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Queue;
 
 public interface Qing_Func {
-	public ArrayList<ST_Node> addNodes(ArrayList<ST_Node> queue, ArrayList<ST_Node> newNodes);
+	public Queue<ST_Node> addNodes(Queue<ST_Node> queue,ArrayList<String> newStates, ST_Node parent, HashSet<String> dict);
 }

@@ -26,8 +26,8 @@ public class Mission_Impossible extends Generic_Problem {
 		int maxDim = 15;
 		int width = (int) (Math.random() * (maxDim - minDim + 1) + minDim);
 		int height = (int) (Math.random() * (maxDim - minDim + 1) + minDim);
-		width = 5;
-		height = 5;
+		// width = 5;
+		// height = 5;
 		int total_cells = (width * height);
 
 		int cell_e = (int) (Math.random() * (total_cells + 1 - 0 + 1) + 0);
@@ -48,7 +48,7 @@ public class Mission_Impossible extends Generic_Problem {
 			generated.add(next);
 		}
 
-		String grid = width + "," + height + "," + c + ";";
+		String grid = width + "," + height + ";"; //+ "," + c + ";";
 		Integer[] generated_array = new Integer[generated.size()];
 		generated.toArray(generated_array);
 		int[] health = new int[num_imf];
@@ -96,7 +96,7 @@ public class Mission_Impossible extends Generic_Problem {
 		 * far>
 		 */
 		String[] splitted = grid.split(";");
-		String initialState = splitted[0] + ";" + splitted[1] + ";" + splitted[2] + ";";
+		String initialState = splitted[0] +"," +splitted[5] + ";" + splitted[1] + ";" + splitted[2] + ";";
 		String[] imfMembers = splitted[3].split(",");
 		String[] imfHealth = splitted[4].split(",");
 		for (int i = 0; i < imfMembers.length; i = i + 2) {
@@ -155,8 +155,8 @@ public class Mission_Impossible extends Generic_Problem {
 				return false;
 			}
 		}
-//		System.out.println("Final");
-//		System.out.println(currentState);
+		// System.out.println("Final");
+		// System.out.println(currentState);
 		if (max_cap.equals(curr_cap)) {
 			return true;
 		}
@@ -164,49 +164,20 @@ public class Mission_Impossible extends Generic_Problem {
 
 	}
 
-	@Override
-	public ArrayList<ST_Node> getNewNodes(ArrayList<String> newStates, ST_Node parent, HashSet<String> dict) {
-		// TODO Auto-generated method stub
-		String[] states = new String[newStates.size()];
-		states = newStates.toArray(states);
-		ArrayList<ST_Node> newNodes = new ArrayList<ST_Node>();
 
-		for (int i = 0; i < states.length; i++) {
-			String currentState = states[i];
-			String[] imfAll = currentState.split(";")[3].split("-");
-			int[] cost = new int[] { 0, 0 };
-			int totalDeaths = 0;
-			int totalSurvived = 0;
-			for (int j = 0; j < imfAll.length; j++) {
-				if (imfAll[j].split(",")[2].equals("100")) {
-					totalDeaths++;
-				}
-				//if (!imfAll[j].split(",")[3].equals("F")) {
-				totalSurvived = totalSurvived + Integer.parseInt(imfAll[j].split(",")[2]);
-				//}
-			}
-			cost[0] = totalDeaths;
-			cost[1] = totalSurvived;
-			String op = currentState.split(">>")[1];
-			currentState = currentState.split(">>")[0];
-			if (!dict.contains(currentState)) {
-				ST_Node newNode = new ST_Node(currentState, parent, op, parent.getDepth() + 1, cost);
-				newNodes.add(newNode);
-			}
+	
 
-		}
-		return newNodes;
-	}
 
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		String grid = Mission_Impossible.gen_grid();
 		long start = System.currentTimeMillis();
-		Mission_Impossible.solve(grid, "BF", false);
+		grid =  "7,5;1,2;4,0;0,3,2,1,3,0,3,2,3,4,4,3;20,30,90,80,70,60;1";
+		Mission_Impossible.solve(grid, "UC", false);
 		System.out.println("Total Time");
 		System.out.println(System.currentTimeMillis() - start);
 
-	}
+	}	
 
 }

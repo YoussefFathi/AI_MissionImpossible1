@@ -5,6 +5,7 @@ public class ST_Node implements Comparable<ST_Node> {
 	private String operator;
 	private int depth;
 	private int[] cost;
+	private int hcost;
 	
 	public ST_Node(String state,ST_Node parentNode,String operator,int depth, int[] cost ) {
 		this.state=state;
@@ -61,6 +62,12 @@ public class ST_Node implements Comparable<ST_Node> {
 		} else {
 			return deaths0 - deaths1;
 		}
+	}
+	public int getHcost() {
+		return hcost;
+	}
+	public void setHcost(int hcost) {
+		this.hcost = hcost;
 	}
 
 }
